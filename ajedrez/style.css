@@ -1,0 +1,376 @@
+:root {
+    /* Colores */
+    --primary-bg-color: #f0f8ff;
+    --secondary-bg-color: #ffffff;
+    --cell-bg-color: #e0e0e0;
+    --cell-hover-bg-color: #d0d0d0;
+    --border-color: #ccc;
+    --dark-border-color: #333;
+    --player-1-color: #000; /* Negro */
+    --player-2-color: #bbb; /* Blanco */
+    --selected-border-color: #007bff;
+    --selected-shadow-color: rgba(0, 123, 255, 0.6);
+    --winning-cell-bg: #ffda00;
+    --winning-cell-border: #ffd700;
+    --current-turn-border: #5cb85c;
+    --current-turn-bg: #dff0d8;
+    --reset-button-bg: #007bff;
+    --reset-button-hover-bg: #0056b3;
+
+    /* Tamaños de dumpling */
+    --small-dumpling-size-percent: 50%;
+    --medium-dumpling-size-percent: 70%;
+    --large-dumpling-size-percent: 90%;
+
+    /* Tamaños de dumpling en el selector */
+    --selector-small-size: 50px;
+    --selector-medium-size: 60px;
+    --selector-large-size: 70px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--primary-bg-color);
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.game-container {
+    background-color: var(--secondary-bg-color);
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    max-width: 450px;
+    width: 95%;
+    position: relative;
+    border: 3px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: var(--dark-border-color);
+    margin-bottom: 15px;
+    font-size: 1.8em;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 8px 15px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 380px;
+    background-color: #e9e9e9; /* Gris claro para info base */
+    transition: background-color 0.3s ease, border 0.3s ease;
+}
+
+.player-info.current-turn {
+    border: 2px solid var(--current-turn-border);
+    background-color: var(--current-turn-bg);
+}
+
+.player-name {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #555;
+}
+
+.dumpling-counts {
+    font-size: 0.95em;
+    color: #666;
+}
+
+.board-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 300px;
+    height: 300px;
+    border: 2px solid var(--dark-border-color);
+    background-color: #f0f0f0;
+    gap: 2px;
+    margin: 20px auto;
+}
+
+.cell {
+    width: 100%;
+    height: 100%;
+    background-color: var(--cell-bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.cell:hover {
+    background-color: var(--cell-hover-bg-color);
+}
+
+.cell.occupied {
+    cursor: default;
+}
+
+/* Estilos para el dumpling dentro de las celdas del tablero */
+.dumpling {
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.dumpling.player-1 { /* Negro */
+    border: 1px solid var(--player-1-color);
+}
+
+.dumpling.player-2 { /* Blanco */
+    border: 1px solid var(--player-2-color);
+}
+
+.dumpling.small {
+    width: var(--small-dumpling-size-percent);
+    height: var(--small-dumpling-size-percent);
+}
+
+.dumpling.medium {
+    width: var(--medium-dumpling-size-percent);
+    height: var(--medium-dumpling-size-percent);
+}
+
+.dumpling.large {
+    width: var(--large-dumpling-size-percent);
+    height: var(--large-dumpling-size-percent);
+}
+
+/* Rutas de las imágenes para los dumplings en el TABLERO */
+.dumpling.player-1.large { background-image: url('assets/images/dumpling-negro-l.png'); }
+.dumpling.player-1.medium { background-image: url('assets/images/dumpling-negro-m.png'); }
+.dumpling.player-1.small { background-image: url('assets/images/dumpling-negro-s.png'); }
+
+.dumpling.player-2.large { background-image: url('assets/images/dumpling-blanco-l.png'); }
+.dumpling.player-2.medium { background-image: url('assets/images/dumpling-blanco-m.png'); }
+.dumpling.player-2.small { background-image: url('assets/images/dumpling-blanco-s.png'); }
+
+
+/* Modificaciones para el texto de mensajes del juego */
+.game-messages {
+    margin-top: 15px;
+    font-size: 1.1em;
+    color: var(--dark-border-color);
+    min-height: 3.5em; /* Valor ajustado para asegurar espacio constante, puedes probar con 4em si es necesario */
+    display: flex; /* Añadir display flex para centrar verticalmente */
+    flex-direction: column; /* Apilar los mensajes */
+    justify-content: center; /* Centrar verticalmente */
+    align-items: center; /* Centrar horizontalmente si el texto no ocupa todo el ancho */
+    text-align: center; /* Asegura que el texto se centre */
+    padding: 5px 0; /* Un poco de padding si es necesario, ajusta si es necesario */
+}
+
+/* Opcional: Asegurarse de que los párrafos dentro no añadan márgenes extra que causen desplazamiento */
+.game-messages p {
+    margin: 0;
+    line-height: 1.2em; /* Asegura un espaciado consistente de línea */
+}
+
+
+/* Estilos para el selector de dumplings */
+.dumpling-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    min-height: 80px;
+}
+
+.dumpling-option {
+    border-radius: 50%;
+    background-color: transparent; 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+/* Tamaños específicos para las imágenes del selector */
+.dumpling-option.large-dumpling {
+    width: var(--selector-large-size);
+    height: var(--selector-large-size);
+}
+
+.dumpling-option.medium-dumpling {
+    width: var(--selector-medium-size);
+    height: var(--selector-medium-size);
+}
+
+.dumpling-option.small-dumpling {
+    width: var(--selector-small-size);
+    height: var(--selector-small-size);
+}
+
+.dumpling-option:hover {
+    transform: scale(1.05);
+    border-color: var(--selected-border-color);
+}
+
+.dumpling-option.selected {
+    border-color: var(--selected-border-color);
+    box-shadow: 0 0 10px var(--selected-shadow-color);
+}
+
+.dumpling-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.dumpling-count-overlay {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.8em;
+    min-width: 15px;
+    text-align: center;
+}
+
+/* Rutas de las imágenes para las OPCIONES de selección */
+.dumpling-option.player-1.large-dumpling { background-image: url('assets/images/dumpling-negro-l.png'); }
+.dumpling-option.player-1.medium-dumpling { background-image: url('assets/images/dumpling-negro-m.png'); }
+.dumpling-option.player-1.small-dumpling { background-image: url('assets/images/dumpling-negro-s.png'); }
+
+.dumpling-option.player-2.large-dumpling { background-image: url('assets/images/dumpling-blanco-l.png'); }
+.dumpling-option.player-2.medium-dumpling { background-image: url('assets/images/dumpling-blanco-m.png'); }
+.dumpling-option.player-2.small-dumpling { background-image: url('assets/images/dumpling-blanco-s.png'); }
+
+#reset-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    cursor: pointer;
+    background-color: var(--reset-button-bg);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#reset-button:hover {
+    background-color: var(--reset-button-hover-bg);
+}
+
+.winning-cell {
+    background-color: var(--winning-cell-bg);
+    border: 2px solid var(--winning-cell-border);
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 600px) {
+    .game-container {
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .player-info {
+        padding: 5px 10px;
+        font-size: 0.9em;
+        width: 95%;
+    }
+
+    .board-grid {
+        width: 90vw;
+        height: 90vw;
+        max-width: 300px;
+        max-height: 300px;
+        margin: 10px auto;
+    }
+
+    .dumpling.small {
+        width: calc(var(--small-dumpling-size-percent) + 5%); /* Ajuste menor para pantallas pequeñas */
+        height: calc(var(--small-dumpling-size-percent) + 5%);
+    }
+    .dumpling.medium {
+        width: calc(var(--medium-dumpling-size-percent) + 5%);
+        height: calc(var(--medium-dumpling-size-percent) + 5%);
+    }
+    .dumpling.large {
+        width: calc(var(--large-dumpling-size-percent) + 5%);
+        height: calc(var(--large-dumpling-size-percent) + 5%);
+    }
+
+    /* Ajuste para el min-height en pantallas pequeñas si es necesario */
+    .game-messages {
+        font-size: 0.9em;
+        margin-top: 10px;
+        min-height: 4em; /* Podría necesitar un poco más de altura mínima en pantallas pequeñas */
+    }
+
+    .dumpling-selection {
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 10px;
+        padding: 5px;
+        width: 98%;
+    }
+
+    .dumpling-option.small-dumpling {
+        width: calc(var(--selector-small-size) - 5px);
+        height: calc(var(--selector-small-size) - 5px);
+    }
+    .dumpling-option.medium-dumpling {
+        width: calc(var(--selector-medium-size) - 5px);
+        height: calc(var(--selector-medium-size) - 5px);
+    }
+    .dumpling-option.large-dumpling {
+        width: calc(var(--selector-large-size) - 5px);
+        height: calc(var(--selector-large-size) - 5px);
+    }
+}
+
+/* Estilos para el Footer de Copyright */
+.footer-copyright {
+    margin-top: 30px; /* Espacio entre el contenedor del juego y el footer */
+    font-size: 0.85em;
+    color: #555;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+}
