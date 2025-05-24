@@ -4,5 +4,194 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6297143255909816"
      crossorigin="anonymous"></script>
 <meta name="google-adsense-account" content="ca-pub-6297143255909816">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitio en Construcción - Huachi</title>
+    <link rel="stylesheet" href="style.css"> 
+    <style>
+        /* Estilos específicos para la página de "holding" */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Empuja el footer hacia abajo */
+            align-items: center;
+            min-height: 100vh; /* Ocupa al menos el 100% de la altura de la ventana */
+            margin: 0;
+            background-color: var(--primary-bg-color, #f0f8ff); /* Usa tu color de fondo o uno por defecto */
+            font-family: Arial, sans-serif;
+            color: var(--dark-border-color, #333); /* Usa tu color de texto o uno por defecto */
+            overflow: hidden; /* Evita barras de desplazamiento si los elementos caen fuera de la vista */
+            position: relative; /* Necesario para posicionar elementos con 'absolute' */
+            cursor: none; /* Oculta el cursor predeterminado */
+        }
+
+        .content-wrapper {
+            flex-grow: 1; /* Permite que el contenido ocupe el espacio disponible */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centra verticalmente el contenido */
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            z-index: 1; /* Asegura que el contenido esté por encima de los elementos que caen */
+            position: relative; /* Asegura que el contenido esté en su propia capa Z */
+        }
+
+        .content-wrapper h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: var(--dark-border-color, #333);
+        }
+
+        .content-wrapper p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        /* Estilos para los elementos que caen (cute effect) */
+        .falling-element {
+            position: absolute;
+            top: -20px; /* Comienza fuera de la vista */
+            font-size: 1.5em; /* Tamaño de los elementos */
+            opacity: 0.8;
+            pointer-events: none; /* Asegura que no interfieran con clics */
+            animation: fall linear forwards; /* Animación de caída */
+            z-index: 0; /* Asegura que estén detrás del contenido principal */
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh); /* Cae hasta el final de la ventana */
+                opacity: 0; /* Se desvanece al caer */
+            }
+        }
+
+        /* Estilos para el rastro del cursor (cute cursor effect) */
+        .cursor-trail-element {
+            position: absolute;
+            font-size: 1em; /* Tamaño de los elementos del rastro */
+            opacity: 0;
+            pointer-events: none; /* No interfiere con clics */
+            animation: fadeOutTrail 1s forwards; /* Animación de desvanecimiento */
+            transform: translate(-50%, -50%); /* Centra el elemento en el cursor */
+            z-index: 9999; /* Asegura que esté encima de todo */
+        }
+
+        @keyframes fadeOutTrail {
+            from {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5); /* Se encoge un poco al desvanecerse */
+            }
+        }
+
+        /* Footer ya definido en style.css, pero si no lo tienes enlazado, puedes copiarlo aquí */
+        /* .footer-copyright {
+            margin-top: 30px;
+            font-size: 0.85em;
+            color: #555;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+        } */
+    </style>
 </head>
+<body>
+    <div class="content-wrapper">
+        <h1></h1>
+        <p></p>
+        </div>
+
+    <footer class="footer-copyright">
+        <p>&copy; Huachi 2025</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const fallingElements = ['✨', '❤️', '🌟', '😊']; // Elementos "cute" para caer
+            const trailElements = ['💖', '🌈', '⭐', '🌸']; // Elementos "cute" para el rastro del cursor
+
+            const fallInterval = 60; // Intervalo en ms para crear nuevos elementos que caen
+            const maxFallingElements = 350; // Número máximo de elementos que caen en pantalla
+
+            // Script para elementos que caen
+            function createFallingElement() {
+                const element = document.createElement('span');
+                element.classList.add('falling-element');
+                element.textContent = fallingElements[Math.floor(Math.random() * fallingElements.length)];
+                
+                const randomHue = Math.floor(Math.random() * 360);
+                element.style.color = `hsl(${randomHue}, 70%, 70%)`;
+                element.style.left = `${Math.random() * 100}vw`;
+
+                const duration = 5 + Math.random() * 5;
+                element.style.animationDuration = `${duration}s`;
+                element.style.animationDelay = `-${Math.random() * 5}s`;
+
+                body.appendChild(element);
+
+                element.addEventListener('animationend', () => {
+                    element.remove();
+                });
+            }
+
+            setInterval(() => {
+                if (document.querySelectorAll('.falling-element').length < maxFallingElements) {
+                    createFallingElement();
+                }
+            }, fallInterval);
+
+
+            // Script para el rastro del cursor
+            function createCursorTrailElement(x, y) {
+                const trailElement = document.createElement('span');
+                trailElement.classList.add('cursor-trail-element');
+                trailElement.textContent = trailElements[Math.floor(Math.random() * trailElements.length)];
+
+                // Color aleatorio para el rastro
+                const randomHue = Math.floor(Math.random() * 360);
+                trailElement.style.color = `hsl(${randomHue}, 80%, 75%)`;
+
+                trailElement.style.left = `${x}px`;
+                trailElement.style.top = `${y}px`;
+
+                body.appendChild(trailElement);
+
+                // Eliminar el elemento después de que termine la animación
+                trailElement.addEventListener('animationend', () => {
+                    trailElement.remove();
+                });
+            }
+
+            // Escuchar el movimiento del ratón
+            let lastMouseX = 0;
+            let lastMouseY = 0;
+            let distanceThreshold = 3; // Crea un elemento cada 20px de movimiento
+
+            document.addEventListener('mousemove', (e) => {
+                const distance = Math.sqrt(Math.pow(e.clientX - lastMouseX, 2) + Math.pow(e.clientY - lastMouseY, 2));
+
+                if (distance > distanceThreshold) {
+                    createCursorTrailElement(e.clientX, e.clientY);
+                    lastMouseX = e.clientX;
+                    lastMouseY = e.clientY;
+                }
+            });
+
+            // Si el cursor se va de la ventana o se detiene mucho tiempo, y vuelve, que aparezca el primero
+            document.addEventListener('mouseenter', (e) => {
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+            });
+
+        });
+    </script>
+    </body>
 </html>
